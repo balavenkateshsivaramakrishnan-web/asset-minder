@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { addAsset, logService, useLedger } from "@/lib/ledger";
+import { AssetIcon } from "@/components/AssetIcon";
 import {
   Dialog,
   DialogContent,
@@ -28,21 +29,31 @@ const NAV = [
   { to: "/reports", label: "Reports" },
 ] as const;
 
-const EMOJI_OPTIONS = ["🏠", "❄️", "🌀", "🧊", "🚗", "🛵", "🔋", "🧺", "📺", "💧"];
+const ICON_OPTIONS = [
+  "home",
+  "airvent",
+  "droplets",
+  "refrigerator",
+  "car",
+  "bike",
+  "battery",
+  "washing",
+  "tv",
+];
 
 function AddAssetDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const [name, setName] = useState("");
   const [detail, setDetail] = useState("");
-  const [emoji, setEmoji] = useState("🏠");
+  const [icon, setIcon] = useState("home");
 
   function submit(e: FormEvent) {
     e.preventDefault();
     if (!name.trim()) return;
-    const asset = addAsset({ name: name.trim(), detail: detail.trim(), emoji });
+    const asset = addAsset({ name: name.trim(), detail: detail.trim(), icon });
     toast.success(`${asset.name} added to your ledger`);
     setName("");
     setDetail("");
-    setEmoji("🏠");
+    setIcon("home");
     onOpenChange(false);
   }
 
@@ -78,19 +89,19 @@ function AddAssetDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (
           <div className="space-y-2">
             <Label>Icon</Label>
             <div className="flex flex-wrap gap-2">
-              {EMOJI_OPTIONS.map((e) => (
+              {ICON_OPTIONS.map((i) => (
                 <button
-                  key={e}
+                  key={i}
                   type="button"
-                  onClick={() => setEmoji(e)}
+                  onClick={() => setIcon(i)}
                   className={cn(
-                    "grid size-9 place-items-center rounded-lg border text-lg transition-colors",
-                    emoji === e
+                    "grid size-9 place-items-center rounded-lg border transition-colors",
+                    icon === i
                       ? "border-peach bg-peach/15"
                       : "border-line bg-card hover:border-ink/25",
                   )}
                 >
-                  {e}
+                  <AssetIcon name={i} className="size-4 text-ink/70" />
                 </button>
               ))}
             </div>
@@ -147,7 +158,7 @@ function LogServiceDialog({ open, onOpenChange }: { open: boolean; onOpenChange:
               <SelectContent>
                 {assets.map((a) => (
                   <SelectItem key={a.id} value={a.id}>
-                    {a.emoji} {a.name}
+                    {a.name}
                   </SelectItem>
                 ))}
               </SelectContent>
