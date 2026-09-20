@@ -10,33 +10,78 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssetsRouteImport } from './routes/assets'
+import { Route as RemindersRouteImport } from './routes/reminders'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as AssetsAssetIdRouteImport } from './routes/assets.$assetId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssetsRoute = AssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemindersRoute = RemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsAssetIdRoute = AssetsAssetIdRouteImport.update({
+  id: '/$assetId',
+  path: '/$assetId',
+  getParentRoute: () => AssetsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRouteWithChildren
+  '/reminders': typeof RemindersRoute
+  '/reports': typeof ReportsRoute
+  '/assets/$assetId': typeof AssetsAssetIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRouteWithChildren
+  '/reminders': typeof RemindersRoute
+  '/reports': typeof ReportsRoute
+  '/assets/$assetId': typeof AssetsAssetIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRouteWithChildren
+  '/reminders': typeof RemindersRoute
+  '/reports': typeof ReportsRoute
+  '/assets/$assetId': typeof AssetsAssetIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/assets' | '/reminders' | '/reports' | '/assets/$assetId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/assets' | '/reminders' | '/reports' | '/assets/$assetId'
+  id:
+    | '__root__'
+    | '/'
+    | '/assets'
+    | '/reminders'
+    | '/reports'
+    | '/assets/$assetId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssetsRoute: typeof AssetsRouteWithChildren
+  RemindersRoute: typeof RemindersRoute
+  ReportsRoute: typeof ReportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +93,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assets': {
+      id: '/assets'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AssetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reminders': {
+      id: '/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof RemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets/$assetId': {
+      id: '/assets/$assetId'
+      path: '/$assetId'
+      fullPath: '/assets/$assetId'
+      preLoaderRoute: typeof AssetsAssetIdRouteImport
+      parentRoute: typeof AssetsRoute
+    }
   }
 }
 
+interface AssetsRouteChildren {
+  AssetsAssetIdRoute: typeof AssetsAssetIdRoute
+}
+
+const AssetsRouteChildren: AssetsRouteChildren = {
+  AssetsAssetIdRoute: AssetsAssetIdRoute,
+}
+
+const AssetsRouteWithChildren =
+  AssetsRoute._addFileChildren(AssetsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssetsRoute: AssetsRouteWithChildren,
+  RemindersRoute: RemindersRoute,
+  ReportsRoute: ReportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
