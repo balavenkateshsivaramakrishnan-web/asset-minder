@@ -1,58 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { formatINR, useLedger } from "@/lib/ledger";
-import { StatusChip, iconBg, progressColor } from "@/components/StatusChip";
-import { cn } from "@/lib/utils";
-
-export const Route = createFileRoute("/assets/$assetId")({
-  component: AssetDetailPage,
-  notFoundComponent: AssetMissing,
-  head: () => ({
-    meta: [
-      { title: "Asset detail — Hearth" },
-      { name: "description", content: "Warranty, AMC contract, service history, and expenses for one asset." },
-      { property: "og:title", content: "Asset detail — Hearth" },
-      { property: "og:description", content: "Warranty, AMC contract, service history, and expenses for one asset." },
-    ],
-  }),
-});
-
-function AssetMissing() {
-  return (
-    <main className="mx-auto max-w-3xl px-5 py-20 text-center">
-      <h1 className="text-2xl font-extrabold tracking-tight">Asset not found</h1>
-      <p className="mt-2 text-soft">This asset may have been removed from your ledger.</p>
-      <Link
-        to="/assets"
-        className="mt-6 inline-flex rounded-full bg-peach px-4 py-2 text-[13px] font-bold text-card transition-colors hover:bg-ink"
-      >
-        Back to assets
-      </Link>
-    </main>
-  );
-}
-
-function AssetDetailPage() {
-  const { assetId } = Route.useParams();
-  const { assets } = useLedger();
-  const asset = assets.find((a) => a.id === assetId);
-
-  if (!asset) throw notFound();
-
-  const total = asset.history.reduce((s, h) => s + h.cost, 0);
-
-  return (
-    <main className="mx-auto max-w-5xl px-5 py-8 lg:px-8">
-      <Link
-        to="/assets"
-        className="text-[13px] font-semibold text-soft transition-colors hover:text-ink"
-      >
-        ← All assets
-      </Link>
-
-      <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className={cn("grid size-14 place-items-center rounded-2xl text-2xl", iconBg(asset.status))}>
-            {asset.emoji}
+import { AssetIcon } from "@/components/AssetIcon";
+...
+          <div className={cn("grid size-14 place-items-center rounded-2xl", iconBg(asset.status))}>
+            <AssetIcon name={asset.icon} className="size-6 text-ink/70" />
           </div>
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{asset.name}</h1>
