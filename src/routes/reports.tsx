@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allExpenses, formatINR, totalSpent, useLedger } from "@/lib/ledger";
+import { AssetIcon } from "@/components/AssetIcon";
 import { iconBg } from "@/components/StatusChip";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +59,8 @@ function ReportsPage() {
               <div key={x.asset.id}>
                 <div className="mb-1.5 flex justify-between text-[12px]">
                   <span className="font-semibold">
-                    {x.asset.emoji} {x.asset.name}
+                    <AssetIcon name={x.asset.icon} className="inline size-3.5 align-[-2px] text-ink/70" />{" "}
+                    {x.asset.name}
                   </span>
                   <span className="font-mono text-soft">{formatINR(x.spent)}</span>
                 </div>
@@ -90,13 +92,13 @@ function ReportsPage() {
               >
                 <div
                   className={cn(
-                    "grid size-8 place-items-center rounded-lg text-sm",
+                    "grid size-8 place-items-center rounded-lg",
                     iconBg(
                       ledger.assets.find((a) => a.id === e.assetId)?.status ?? "healthy",
                     ),
                   )}
                 >
-                  {e.emoji}
+                  <AssetIcon name={e.icon} className="size-4 text-ink/70" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold">

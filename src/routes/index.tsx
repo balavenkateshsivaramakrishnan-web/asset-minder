@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allExpenses, formatINR, totalSpent, useLedger } from "@/lib/ledger";
 import { AssetCard } from "@/components/AssetCard";
+import { AssetIcon } from "@/components/AssetIcon";
 import { iconBg } from "@/components/StatusChip";
 import { cn } from "@/lib/utils";
 
@@ -224,13 +225,13 @@ function Dashboard() {
                 <div key={e.id} className="flex items-center gap-3">
                   <div
                     className={cn(
-                      "grid size-8 place-items-center rounded-lg text-sm",
+                      "grid size-8 place-items-center rounded-lg",
                       iconBg(
                         assets.find((a) => a.id === e.assetId)?.status ?? "healthy",
                       ),
                     )}
                   >
-                    {e.emoji}
+                    <AssetIcon name={e.icon} className="size-4 text-ink/70" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[13px] font-semibold">
