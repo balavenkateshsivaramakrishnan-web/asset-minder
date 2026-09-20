@@ -42,7 +42,7 @@ export type Expense = {
   id: string;
   assetId: string;
   assetName: string;
-  emoji: string;
+  icon: string;
   label: string;
   date: string;
   cost: number;
@@ -246,13 +246,13 @@ export function useLedger() {
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }
 
-export function addAsset(input: { name: string; detail: string; emoji: string }) {
+export function addAsset(input: { name: string; detail: string; icon: string }) {
   const id = input.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now().toString(36);
   const asset: Asset = {
     id,
     name: input.name,
     detail: input.detail || "Home",
-    emoji: input.emoji || "🏠",
+    icon: input.icon || "home",
     status: "healthy",
     statusLabel: "Healthy",
     nextLabel: "First service",
@@ -288,7 +288,7 @@ export function logService(input: {
     id: "exp-" + Date.now().toString(36),
     assetId: asset.id,
     assetName: asset.name,
-    emoji: asset.emoji,
+    icon: asset.icon,
     label: input.label,
     date: input.date,
     cost: input.cost,
@@ -302,7 +302,7 @@ export function allExpenses(s: LedgerState): Expense[] {
       id: h.id,
       assetId: a.id,
       assetName: a.name,
-      emoji: a.emoji,
+      icon: a.icon,
       label: h.label,
       date: h.date,
       cost: h.cost,
