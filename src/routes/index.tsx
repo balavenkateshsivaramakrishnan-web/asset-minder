@@ -40,7 +40,7 @@ function Dashboard() {
   });
   const expenses = allExpenses(ledger).slice(0, 3);
   const featured = assets.find((a) => a.id === "split-ac") ?? assets[0];
-  const featuredTotal = featured.history.reduce((s, h) => s + h.cost, 0);
+  const featuredTotal = featured?.history.reduce((s, h) => s + h.cost, 0) ?? 0;
 
   return (
     <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
