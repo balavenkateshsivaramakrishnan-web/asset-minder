@@ -3,7 +3,17 @@ import type { Asset } from "@/lib/ledger";
 import { StatusChip, iconBg, progressColor } from "@/components/StatusChip";
 import { AssetIcon } from "@/components/AssetIcon";
 import { cn } from "@/lib/utils";
-...
+
+export function AssetCard({ asset, delay = 0 }: { asset: Asset; delay?: number }) {
+  return (
+    <Link
+      to="/assets/$assetId"
+      params={{ assetId: asset.id }}
+      className="animate-rise block rounded-xl border border-line p-4 transition-colors hover:border-ink/25"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-3">
           <div className={cn("grid size-10 place-items-center rounded-lg", iconBg(asset.status))}>
             <AssetIcon name={asset.icon} className="size-5 text-ink/70" />
           </div>
