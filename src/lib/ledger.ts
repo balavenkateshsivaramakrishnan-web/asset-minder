@@ -13,7 +13,7 @@ export type Asset = {
   id: string;
   name: string;
   detail: string;
-  emoji: string;
+  icon: string;
   status: AssetStatus;
   statusLabel: string;
   nextLabel: string;
